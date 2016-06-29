@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>frames</key>
+		<dict>
+			<key>main/account_btn_bg.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{652,381},{197,175}}</string>
+				<key>offset</key>
+				<string>{-2,-15}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{200,212}</string>
+			</dict>
+			<key>main/account_btn_def.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{861,552},{164,46}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{164,46}</string>
+			</dict>
+			<key>main/account_btn_down.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{633,720},{164,46}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{164,46}</string>
+			</dict>
+			<key>main/bet_btn_box.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{911,716},{148,101}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{148,101}</string>
+			</dict>
+			<key>main/bet_btn_def.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{933,2},{353,87}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{353,87}</string>
+			</dict>
+			<key>main/bet_btn_down.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{933,359},{353,87}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{353,87}</string>
+			</dict>
+			<key>main/bottom_box.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{867,2},{546,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{546,62}</string>
+			</dict>
+			<key>main/kx_text.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{633,610},{91,49}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{91,49}</string>
+			</dict>
+			<key>main/kx_text_line.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{855,203},{365,2}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{365,2}</string>
+			</dict>
+			<key>main/news_btn_bg.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{652,203},{199,174}}</string>
+				<key>offset</key>
+				<string>{-1,-17}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{200,212}</string>
+			</dict>
+			<key>main/news_btn_def.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{801,560},{164,46}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{164,46}</string>
+			</dict>
+			<key>main/news_btn_down.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{851,720},{164,46}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{164,46}</string>
+			</dict>
+			<key>main/scroll_box.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{2,924},{310,77}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{310,77}</string>
+			</dict>
+			<key>main/tools_btn_bg.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{652,2},{197,211}}</string>
+				<key>offset</key>
+				<string>{-2,1}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{200,212}</string>
+			</dict>
+			<key>main/tools_btn_def.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{801,728},{164,46}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{164,46}</string>
+			</dict>
+			<key>main/tools_btn_down.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{633,560},{164,46}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{164,46}</string>
+			</dict>
+			<key>main/main_kxbg.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{2,446},{381,627}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{381,627}</string>
+			</dict>
+			<key>main/news_image_box.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{2,2},{646,440}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{646,440}</string>
+			</dict>
+			<key>main/newsIcon.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{901,868},{107,52}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{107,52}</string>
+			</dict>
+		</dict>
+		<key>metadata</key>
+		<dict>
+			<key>format</key>
+			<integer>2</integer>
+			<key>textureFileName</key>
+			<string>main.png</string>
+			<key>realTextureFileName</key>
+			<string>main.png</string>
+			<key>size</key>
+			<string>{1024,1024}</string>
+		</dict>
+		<key>texture</key>
+		<dict>
+			<key>width</key>
+			<integer>1024</integer>
+			<key>height</key>
+			<integer>1024</integer>
+		</dict>
+	</dict>
+</plist>

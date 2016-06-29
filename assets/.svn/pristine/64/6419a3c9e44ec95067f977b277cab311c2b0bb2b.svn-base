@@ -1,0 +1,829 @@
+var dataConfig = require('DataConfig');
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        ballList_b: cc.Node,
+        ballList_s: cc.Node,
+        ballList_g: cc.Node,
+        ball: cc.Prefab,
+        tab: cc.Prefab,
+        del_b: cc.Node,
+        del_s: cc.Node,
+        del_g: cc.Node,
+        toolS: {
+            default: [],
+            type: cc.Node
+        },
+        bet: cc.Node,
+        instantlyBet: cc.Node,
+        pick: {
+            default: [],
+            type: cc.Node
+        },
+        ballList: cc.Node,
+        pack2_del: cc.Node,
+        pack3_del: cc.Node,
+        pack2_toolS: {
+            default: [],
+            type: cc.Node
+        },
+        pack3_toolS: {
+            default: [],
+            type: cc.Node
+        },
+        pack2_tool: cc.Node,
+        ballList3: cc.Node,
+
+        pack4BallList1: cc.Node,
+        pack4BallList2: cc.Node,
+        pack4BallList3: cc.Node,
+        pack5BallList1: cc.Node,
+        pack5BallList2: cc.Node,
+        pack5BallList3: cc.Node,
+        tabList: cc.Node,
+
+        pack5Bw: cc.Node,
+        pack5Sw: cc.Node,
+        pack5Gw: cc.Node,
+        tip: cc.Prefab,
+        canvas: cc.Node,
+        icon: cc.Sprite,
+        choiceText:cc.Label,
+        choiceTip: {
+            default: [],
+            type: cc.String
+        },
+        icons:{
+            default: [],
+            type: cc.SpriteFrame
+        },
+        homeBtnGroups: {
+            default: [],
+            type: cc.Node
+        },
+
+
+    },
+
+    onLoad: function () {
+        //选中号码数据
+        this.selectionData = {
+            baiwei: [],
+            shiwei: [],
+            gewei: []
+        };
+        //百位十位个位每个球的实例
+        this.ballBs = [];
+        this.ballSs = [];
+        this.ballGs = [];
+        this.ballPack2Bs = [];
+        this.ballPack3Bs = [];
+        this.pack4ballBs = [];
+        this.pack4ballSs = [];
+        this.pack4ballGs = [];
+        this.pack5ballBs = [];
+        this.pack5ballSs = [];
+        this.pack5ballGs = [];
+        this.tabS = [];
+
+
+        //和数和值新球
+        this.newBallPack3Bs = [];
+
+        //玩法类型
+        this.betType = [7, 0];
+        this.packShow(0);
+
+        this.pick1AddBall();
+        this.delBall();
+        this.toolBall();
+        this.pack2AddBall();
+        this.pack3AddBall();
+        this.pick4AddBall();
+        this.pick5AddBall();
+        this.tabAdd();
+        this.tabPack();
+        this.addTip();
+    },
+
+    //设置 采种标题
+    setIcon:function(n){
+        this.icon.spriteFrame = this.icons[n];
+    },
+
+    //设置提示信息
+    setTip: function (n) {
+        this.choiceText.string = this.choiceTip[n];
+    },
+
+
+    //添加提示弹窗
+    addTip: function () {
+        var tip = cc.instantiate(this.tip);
+        this.tipModule = tip.getComponent('tip');
+        this.canvas.addChild(tip);
+    },
+
+
+    //弹出提示
+    tipShow: function (data) {
+        this.tipModule.init(data,this);
+        this.tipModule.show();
+    },
+
+    //弹窗层以下所有按钮不可点
+    toggleHomeBtns: function (enable) {
+        for (var i = 0; i < this.homeBtnGroups.length; ++i) {
+            var group = this.homeBtnGroups[i];
+            if (!enable) {
+                cc.eventManager.pauseTarget(group, true);
+            } else {
+                cc.eventManager.resumeTarget(group, true);
+            }
+        }
+    },
+
+
+    //显示不同界面
+    packShow: function (n) {
+        for (var i = 0; i < this.pick.length; i++) {
+            if (i != n) {
+                this.pick[i].opacity = 0;
+                this.pick[i].active = false;
+            } else {
+                this.pick[i].opacity = 255;
+                this.pick[i].active = true;
+            }
+        }
+    },
+
+    //生成界面2的球
+    pack2AddBall: function () {
+        var bw = dataConfig.seed3D_data.b
+        for (var i = 0; i < bw.length; ++i) {
+            var ballB = cc.instantiate(this.ball)
+            this.ballPack2Bs.push(ballB);
+            this.addEventBtn(ballB, 0);
+            ballB.getComponent('ball').init(bw[i]);
+            this.ballList.addChild(ballB);
+        }
+    },
+
+    //生成界面3的球
+    pack3AddBall: function () {
+        var zx = dataConfig.seed3D_ZxData
+        for (var i = 0; i < zx.length; ++i) {
+            var ballB = cc.instantiate(this.ball);
+            this.newBallPack3Bs.push(ballB);
+            this.ballPack3Bs.push(ballB);
+            this.addEventBtn(ballB, 0);
+            ballB.getComponent('ball').init(zx[i]);
+            this.ballList3.addChild(ballB);
+        }
+    },
+
+
+    //生成界面4的球
+    pick4AddBall: function () {
+        //百位十位个位界面渲染数据
+        var bw = dataConfig.seed3D_data.b,
+            sw = dataConfig.seed3D_data.s,
+            gw = dataConfig.seed3D_data.g
+
+        for (var i = 0; i < bw.length; ++i) {
+            var ballB = cc.instantiate(this.ball),
+                ballS = cc.instantiate(this.ball),
+                ballG = cc.instantiate(this.ball);
+
+            this.pack4ballBs.push(ballB);
+            this.pack4ballSs.push(ballS);
+            this.pack4ballGs.push(ballG);
+
+            this.pack4AddEventBtn(ballB, 0);
+            this.pack4AddEventBtn(ballS, 1);
+            this.pack4AddEventBtn(ballG, 2);
+
+
+            ballB.getComponent('ball').init(bw[i]);
+            ballS.getComponent('ball').init(sw[i]);
+            ballG.getComponent('ball').init(gw[i]);
+
+
+            this.pack4BallList1.addChild(ballB);
+            this.pack4BallList2.addChild(ballS);
+            this.pack4BallList3.addChild(ballG);
+        }
+    },
+
+    //生成界面5的球
+    pick5AddBall: function () {
+        //百位十位个位界面渲染数据
+        var bw = dataConfig.seed3D_data.b,
+            sw = dataConfig.seed3D_data.s,
+            gw = dataConfig.seed3D_data.g
+
+        for (var i = 0; i < bw.length; ++i) {
+            var ballB = cc.instantiate(this.ball),
+                ballS = cc.instantiate(this.ball),
+                ballG = cc.instantiate(this.ball);
+
+            this.pack5ballBs.push(ballB);
+            this.pack5ballSs.push(ballS);
+            this.pack5ballGs.push(ballG);
+
+            this.pack5AddEventBtn(ballB, 0);
+            this.pack5AddEventBtn(ballS, 1);
+            this.pack5AddEventBtn(ballG, 2);
+
+
+            ballB.getComponent('ball').init(bw[i]);
+            ballS.getComponent('ball').init(sw[i]);
+            ballG.getComponent('ball').init(gw[i]);
+
+
+            this.pack5BallList1.addChild(ballB);
+            this.pack5BallList2.addChild(ballS);
+            this.pack5BallList3.addChild(ballG);
+        }
+    },
+
+    //生成tab切换列表
+    tabAdd: function () {
+        var text = dataConfig.bxData.tab;
+        for (var i = 0; i < text.length; ++i) {
+            var tab = cc.instantiate(this.tab);
+            tab.id = i;
+            this.tabS.push(tab);
+            this.tabAddEventBtn(tab);
+            tab.getComponent('bxTab').init(text[i]);
+            if (i == 0) {
+                tab.getComponent('bxTab').setLogoImg(0);
+            }
+            this.tabList.addChild(tab);
+        }
+
+    },
+    //tab点击事件处理
+    tabAddEventBtn: function (item) {
+        var self = this;
+        item.on('touchend', function (event) {
+            var tab = event.target.getComponent('bxTab');
+            var id = tab.node.id;
+            self.tabBgDel();
+            tab.getComponent('bxTab').setLogoImg(0);
+            self.tabRoute(id);
+            self.tabPack();
+        }, this);
+    },
+
+    //tab导航处理
+    tabRoute: function (id) {
+        if (id == 0) {
+            this.betType = [6, 0];
+            this.setTip(5);
+        } else if (id == 1) {
+            this.betType = [6, 1];
+            this.setTip(11);
+        } else if (id == 2) {
+            this.betType = [6, 2];
+            this.setTip(12);
+        } else if (id == 3) {
+            this.betType = [6, 3];
+            this.setTip(13);
+        } else if (id == 4) {
+            this.betType = [6, 4];
+            this.setTip(14);
+        } else if (id == 5) {
+            this.betType = [6, 5];
+            this.setTip(15);
+        }
+    },
+
+    tabPack: function () {
+        this.delAllBall();
+        var seedXWFType = this.betType[1],
+            pack5Bw = this.pack5Bw,
+            pack5Sw = this.pack5Sw,
+            pack5Gw = this.pack5Gw;
+        pack5Bw.opacity = 0;
+        pack5Bw.active = false;
+        pack5Sw.opacity = 0;
+        pack5Sw.active = false;
+        pack5Gw.opacity = 0;
+        pack5Gw.active = false;
+        if (seedXWFType == 0) {
+            pack5Bw.opacity = 255;
+            pack5Bw.active = true;
+        } else if (seedXWFType == 1) {
+            pack5Sw.opacity = 255;
+            pack5Sw.active = true;
+        } else if (seedXWFType == 2) {
+            pack5Gw.opacity = 255;
+            pack5Gw.active = true;
+        } else if (seedXWFType == 3) {
+            pack5Bw.opacity = 255;
+            pack5Bw.active = true;
+            pack5Sw.opacity = 255;
+            pack5Sw.active = true;
+        } else if (seedXWFType == 4) {
+            pack5Bw.opacity = 255;
+            pack5Bw.active = true;
+            pack5Gw.opacity = 255;
+            pack5Gw.active = true;
+        } else if (seedXWFType == 5) {
+            pack5Sw.opacity = 255;
+            pack5Sw.active = true;
+            pack5Gw.opacity = 255;
+            pack5Gw.active = true;
+        }
+    },
+
+    //tab背景清除
+    tabBgDel: function () {
+        for (var i = 0; i < this.tabS.length; i++) {
+            this.tabS[i].getComponent('bxTab').setLogoImg(1);
+        }
+    },
+
+    //pack5球的点击事件处理
+    pack5AddEventBtn: function (item, typeBall) {
+        var self = this;
+        item.on('touchend', function (event) {
+            var ball = event.target.getComponent('ball');
+            var type = ball.type,
+                id = ball.id - 1;
+            var data = self.selectionData.baiwei;
+            var balls = self.pack5ballBs;
+            if (typeBall === 1) {
+                data = self.selectionData.shiwei;
+                balls = self.pack5ballSs;
+            } else if (typeBall === 2) {
+                data = self.selectionData.gewei;
+                balls = self.pack5ballGs;
+            }
+            self.delBalls(balls);
+            ball.setLogoImg(type);
+            if (data.indexOf(id) !== -1) {
+                data.splice(data.indexOf(id), 1);
+            } else {
+                data[0] = id;
+            }
+
+            self.betTypeJudge(self.betType);
+        }, this);
+    },
+
+
+    //添加界面4球的点击事件
+    pack4AddEventBtn: function (item, typeBall) {
+        var self = this;
+        item.on('touchend', function (event) {
+            var ball = event.target.getComponent('ball');
+            var type = ball.type,
+                id = ball.id - 1;
+            var data = self.selectionData.baiwei;
+            var dataG = self.selectionData.gewei;
+            if (typeBall === 2) {
+                if (data.indexOf(id) == -1) {
+                    data = self.selectionData.gewei;
+                    self.delBalls(self.pack4ballGs);
+                    ball.setLogoImg(type);
+                    if (data.indexOf(id) !== -1) {
+                        data.splice(data.indexOf(id), 1);
+                    } else {
+                        data[0] = id;
+                    }
+                } else {
+                    self.tipShow('已经选了相同的对子');
+                }
+
+            } else {
+                if (dataG.indexOf(id) == -1) {
+                    self.delBalls(self.pack4ballBs);
+                    self.delBalls(self.pack4ballSs);
+                    self.pack4ballBs[id].getComponent('ball').setLogoImg(type);
+                    self.pack4ballSs[id].getComponent('ball').setLogoImg(type);
+                    if (data.indexOf(id) !== -1) {
+                        data.splice(data.indexOf(id), 1);
+                    } else {
+                        data[0] = id;
+                    }
+                } else {
+                    self.tipShow('已经选择了相同的单数号码');
+                }
+
+            }
+
+            self.betTypeJudge(self.betType);
+        }, this);
+    },
+
+
+    //清除球
+    delBalls: function (balls) {
+        for (var i = 0; i < balls.length; i++) {
+            balls[i].getComponent('ball').setLogoImg(1);
+        }
+    },
+
+
+    //显示隐藏界面3 多余的一个球
+    showPack3Ball: function (n) {
+        //等于1  显示和数界面   28个球的   否则就是26个球的和组界面
+        var ballPack3Bs = this.ballPack3Bs,
+            newBallPack3Bs = this.newBallPack3Bs;
+        var lastBall = newBallPack3Bs[newBallPack3Bs.length - 1],
+            shiftBall = newBallPack3Bs[0];
+
+        if (n == 1) {
+            if (ballPack3Bs.length < 28) {
+                lastBall.opacity = 255;
+                lastBall.active = true;
+                shiftBall.opacity = 255;
+                shiftBall.active = true;
+                ballPack3Bs.push(lastBall);
+                ballPack3Bs.unshift(shiftBall);
+            }
+        } else {
+            if (ballPack3Bs.length > 26) {
+                lastBall.opacity = 0;
+                lastBall.active = false;
+                shiftBall.opacity = 0;
+                shiftBall.active = false;
+                ballPack3Bs.shift();
+                ballPack3Bs.pop();
+
+            }
+        }
+
+    },
+
+
+    //添加界面1的球
+    pick1AddBall: function () {
+        //百位十位个位界面渲染数据
+        var bw = dataConfig.seed3D_data.b,
+            sw = dataConfig.seed3D_data.s,
+            gw = dataConfig.seed3D_data.g
+
+        for (var i = 0; i < bw.length; ++i) {
+            var ballB = cc.instantiate(this.ball),
+                ballS = cc.instantiate(this.ball),
+                ballG = cc.instantiate(this.ball);
+
+            this.ballBs.push(ballB);
+            this.ballSs.push(ballS);
+            this.ballGs.push(ballG);
+
+            this.addEventBtn(ballB, 0);
+            this.addEventBtn(ballS, 1);
+            this.addEventBtn(ballG, 2);
+
+
+            ballB.getComponent('ball').init(bw[i]);
+            ballS.getComponent('ball').init(sw[i]);
+            ballG.getComponent('ball').init(gw[i]);
+
+
+            this.ballList_b.addChild(ballB);
+            this.ballList_s.addChild(ballS);
+            this.ballList_g.addChild(ballG);
+        }
+    },
+
+    //添加球的点击事件
+    addEventBtn: function (item, typeBall) {
+        var self = this;
+        item.on('touchend', function (event) {
+            var ball = event.target.getComponent('ball');
+            var type = ball.type,
+                id = ball.id - 1;
+            var data = self.selectionData.baiwei;
+            if (typeBall === 1) {
+                data = self.selectionData.shiwei;
+            } else if (typeBall === 2) {
+                data = self.selectionData.gewei;
+            }
+            ball.setLogoImg(type);
+            if (data.indexOf(id) !== -1) {
+                data.splice(data.indexOf(id), 1);
+            } else {
+                data.push(id);
+            }
+            if (self.betType[0] === 11 && data.length > 3) {
+                self.tipShow('最多只能选三个球');
+                data.pop();
+                ball.setLogoImg(1);
+            }
+            self.betTypeJudge(self.betType);
+        }, this);
+    },
+    //清除选中的球
+    delBall: function () {
+        var self = this;
+        self.del_b.on('touchend', function (e) {
+            self.delBalls(self.ballBs);
+            self.selectionData.baiwei = [];
+            self.betTypeJudge(self.betType);
+        });
+        self.del_s.on('touchend', function (e) {
+            self.delBalls(self.ballSs);
+            self.selectionData.shiwei = [];
+            self.betTypeJudge(self.betType);
+        });
+        self.del_g.on('touchend', function (e) {
+            self.delBalls(self.ballGs);
+            self.selectionData.gewei = [];
+            self.betTypeJudge(self.betType);
+        });
+        self.pack2_del.on('touchend', function (e) {
+            self.delBalls(self.ballPack2Bs);
+            self.selectionData.baiwei = [];
+            self.betTypeJudge(self.betType);
+        });
+        self.pack3_del.on('touchend', function (e) {
+            self.delBalls(self.ballPack3Bs);
+            self.selectionData.baiwei = [];
+            self.betTypeJudge(self.betType);
+        });
+
+    },
+
+    //全部清除  切换玩法使用
+    delAllBall: function () {
+        var self = this;
+        for (var i = 0; i < self.ballBs.length; i++) {
+            self.ballBs[i].getComponent('ball').setLogoImg(1);
+            self.ballSs[i].getComponent('ball').setLogoImg(1);
+            self.ballGs[i].getComponent('ball').setLogoImg(1);
+            self.pack5ballBs[i].getComponent('ball').setLogoImg(1);
+            self.pack5ballSs[i].getComponent('ball').setLogoImg(1);
+            self.pack5ballGs[i].getComponent('ball').setLogoImg(1);
+            self.ballPack2Bs[i].getComponent('ball').setLogoImg(1);
+        }
+
+        for (var i = 0; i < self.ballPack3Bs.length; i++) {
+            self.ballPack3Bs[i].getComponent('ball').setLogoImg(1);
+        }
+
+        self.selectionData.baiwei = [];
+        self.selectionData.shiwei = [];
+        self.selectionData.gewei = [];
+        self.betTypeJudge(self.betType);
+    },
+
+
+    //位数筛选
+    toolBall: function () {
+        var self = this,
+            toolS = self.toolS;
+        for (var i = 0; i < toolS.length; i++) {
+            toolS[i].id = i;
+            toolS[i].on('touchend', function (e) {
+                var id = e.target.id;
+                if (id < 5) {
+                    self.selectionData.baiwei = [];
+                    if (id === 0) {
+                        self.typeBall(0, 0);
+                    } else if (id === 1) {
+                        self.typeBall(0, 1);
+                    } else if (id === 2) {
+                        self.typeBall(0, 2);
+                    } else if (id === 3) {
+                        self.typeBall(0, 3);
+                    } else if (id === 4) {
+                        self.typeBall(0, 4);
+                    }
+                } else if (4 < id && id < 10) {
+                    self.selectionData.shiwei = [];
+                    if (id === 5) {
+                        self.typeBall(1, 0);
+                    } else if (id === 6) {
+                        self.typeBall(1, 1);
+                    } else if (id === 7) {
+                        self.typeBall(1, 2);
+                    } else if (id === 8) {
+                        self.typeBall(1, 3);
+                    } else if (id === 9) {
+                        self.typeBall(1, 4);
+                    }
+                } else if (9 < id || id < 15) {
+                    self.selectionData.gewei = [];
+                    if (id === 10) {
+                        self.typeBall(2, 0);
+                    } else if (id === 11) {
+                        self.typeBall(2, 1);
+                    } else if (id === 12) {
+                        self.typeBall(2, 2);
+                    } else if (id === 13) {
+                        self.typeBall(2, 3);
+                    } else if (id === 14) {
+                        self.typeBall(2, 4);
+                    }
+                }
+            });
+        }
+
+
+        var pack2_toolS = self.pack2_toolS;
+        for (var i = 0; i < pack2_toolS.length; i++) {
+            pack2_toolS[i].id = i;
+            pack2_toolS[i].on('touchend', function (e) {
+                var id = e.target.id;
+                self.selectionData.baiwei = [];
+                if (id === 0) {
+                    self.typeBall(0, 0);
+                } else if (id === 1) {
+                    self.typeBall(0, 1);
+                } else if (id === 2) {
+                    self.typeBall(0, 2);
+                } else if (id === 3) {
+                    self.typeBall(0, 3);
+                } else if (id === 4) {
+                    self.typeBall(0, 4);
+                }
+            })
+        }
+
+        var pack3_toolS = self.pack3_toolS;
+        for (var i = 0; i < pack3_toolS.length; i++) {
+            pack3_toolS[i].id = i;
+            pack3_toolS[i].on('touchend', function (e) {
+                var id = e.target.id;
+                self.selectionData.baiwei = [];
+                if (id === 0) {
+                    self.hTypeBall(0);
+                } else if (id === 1) {
+                    self.hTypeBall(1);
+                } else if (id === 2) {
+                    self.hTypeBall(2);
+                } else if (id === 3) {
+                    self.hTypeBall(3);
+                } else if (id === 4) {
+                    self.hTypeBall(4);
+                }
+            })
+        }
+
+
+    },
+
+    //和值和和组的  工具选择
+    hTypeBall: function (btnType) {
+        var ballPack3Bs = this.ballPack3Bs
+        var data = this.selectionData.baiwei;
+
+
+        for (var i = 0; i < ballPack3Bs.length; i++) {
+            var id = ballPack3Bs[i].getComponent('ball').id - 1;
+            if (btnType === 0) {
+                data.push(id);
+                ballPack3Bs[i].getComponent('ball').setLogoImg(0);
+            } else if (btnType === 1) {
+                ballPack3Bs[i].getComponent('ball').setLogoImg(1);
+                if (i > ballPack3Bs.length / 2 - 1) {
+                    ballPack3Bs[i].getComponent('ball').setLogoImg(0);
+                    data.push(id);
+                }
+            } else if (btnType === 2) {
+                ballPack3Bs[i].getComponent('ball').setLogoImg(1);
+                if (i < ballPack3Bs.length / 2) {
+                    ballPack3Bs[i].getComponent('ball').setLogoImg(0);
+                    data.push(id);
+                }
+            } else if (btnType === 3) {
+                ballPack3Bs[i].getComponent('ball').setLogoImg(1);
+                if (i % 2 !== 0) {
+                    ballPack3Bs[i].getComponent('ball').setLogoImg(0);
+                    data.push(id);
+                }
+            } else if (btnType === 4) {
+                ballPack3Bs[i].getComponent('ball').setLogoImg(1);
+                if (i % 2 === 0) {
+                    ballPack3Bs[i].getComponent('ball').setLogoImg(0);
+                    data.push(id);
+                }
+            }
+        }
+        this.betTypeJudge(this.betType);
+    },
+
+
+    //位数和选择类型判断  0代表全选  1代表选大  2代表选小 3代表选奇数   4代表选偶数
+    typeBall: function (type, btnType) {
+        var balls = this.ballBs;
+        var ballPack2Bs = this.ballPack2Bs
+        var data = this.selectionData.baiwei;
+        if (type === 1) {
+            balls = this.ballSs;
+            data = this.selectionData.shiwei;
+        } else if (type === 2) {
+            balls = this.ballGs;
+            data = this.selectionData.gewei;
+        }
+        for (var i = 0; i < balls.length; i++) {
+            if (btnType === 0) {
+                data.push(i);
+                balls[i].getComponent('ball').setLogoImg(0);
+                ballPack2Bs[i].getComponent('ball').setLogoImg(0);
+            } else if (btnType === 1) {
+                balls[i].getComponent('ball').setLogoImg(1);
+                ballPack2Bs[i].getComponent('ball').setLogoImg(1);
+                if (i > 4) {
+                    balls[i].getComponent('ball').setLogoImg(0);
+                    ballPack2Bs[i].getComponent('ball').setLogoImg(0);
+                    data.push(i);
+                }
+            } else if (btnType === 2) {
+                balls[i].getComponent('ball').setLogoImg(1);
+                ballPack2Bs[i].getComponent('ball').setLogoImg(1);
+                if (i < 5) {
+                    balls[i].getComponent('ball').setLogoImg(0);
+                    ballPack2Bs[i].getComponent('ball').setLogoImg(0);
+                    data.push(i);
+                }
+            } else if (btnType === 3) {
+                balls[i].getComponent('ball').setLogoImg(1);
+                ballPack2Bs[i].getComponent('ball').setLogoImg(1);
+                if (i % 2 !== 0) {
+                    balls[i].getComponent('ball').setLogoImg(0);
+                    ballPack2Bs[i].getComponent('ball').setLogoImg(0);
+                    data.push(i);
+                }
+            } else if (btnType === 4) {
+                balls[i].getComponent('ball').setLogoImg(1);
+                ballPack2Bs[i].getComponent('ball').setLogoImg(1);
+                if (i % 2 === 0) {
+                    balls[i].getComponent('ball').setLogoImg(0);
+                    ballPack2Bs[i].getComponent('ball').setLogoImg(0);
+                    data.push(i);
+                }
+            }
+        }
+        this.betTypeJudge(this.betType);
+    },
+
+    //隐藏工具框
+    hidePack2_tool: function () {
+        this.pack2_tool.opacity = 0;
+        this.pack2_tool.active = false;
+    },
+
+    //显示
+    showPack2_tool: function () {
+        this.pack2_tool.opacity = 255;
+        this.pack2_tool.active = true;
+    },
+
+
+    //投注类型判断
+    betTypeJudge: function (betType) {
+        var self = this,
+            bet = self.bet.getComponent('betType'),
+            data = self.selectionData;
+        var seedWFType = betType[0];
+        if (seedWFType === 1) {
+            //直选
+            bet.bet3D_Zx(data);
+        } else if (seedWFType === 2) {
+            //通选
+            bet.bet3D_Zx(data);
+        } else if (seedWFType === 3) {
+            //组三
+            bet.bet3D_Zs(data);
+            self.showPack2_tool();
+        } else if (seedWFType === 4) {
+            //组六
+            bet.bet3D_Zl(data);
+            self.showPack2_tool();
+        } else if (seedWFType === 5) {
+            //和数
+            bet.bet3D_1d(data);
+        } else if (seedWFType === 6) {
+            //包号
+            bet.bet3D_BxD(data);
+        } else if (seedWFType === 7) {
+            //1D
+            bet.bet3D_1d(data);
+        } else if (seedWFType === 8) {
+            //2D
+            bet.bet3D_1d(data);
+        } else if (seedWFType === 9) {
+            //和组
+            console.log('和组')
+            bet.bet3D_Hz(data);
+        } else if (seedWFType === 10) {
+            //复选3
+            console.log('复选3')
+            bet.bet3D_Fxs(data);
+        } else if (seedWFType === 11) {
+            //复选6
+            console.log('复选6')
+            self.hidePack2_tool();
+            bet.bet3D_Fxl(data);
+        }
+    }
+
+
+});

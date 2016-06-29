@@ -1,0 +1,48 @@
+var dataConfig = require('DataConfig');
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        id: 0,
+        type:0,
+        bgSF: {
+            default: [],
+            type: cc.SpriteFrame
+        },
+        color: {
+            default: [],
+            type: cc.Color
+        },
+        ballBg: cc.Sprite,
+        nub: cc.Label,
+        miss:cc.Label
+    },
+
+    init:function(data){
+        this.id = data.id;
+        if(data.miss < 20){
+            var color = this.color[0];
+            this.miss.node.color = color;
+        }
+        this.type = data.type;
+        this.nub.string = data.nub;
+        this.miss.string = data.miss;
+    },
+
+
+    //选中设置球背景图
+    setLogoImg:function(type){
+        var bgSF = this.bgSF[0];
+        var color = this.color[0];
+        if(type === 0){
+            bgSF = this.bgSF[1];
+            color = new cc.Color(255, 255, 255);
+            this.type = 1;
+        }else{
+            this.type = 0;
+        }
+        this.nub.node.color = color;
+        this.ballBg.getComponent(cc.Sprite).spriteFrame = bgSF;
+    }
+});

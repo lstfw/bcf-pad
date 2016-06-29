@@ -1,0 +1,136 @@
+var dataConfig = require('DataConfig');
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        id: 0,
+        logo: cc.Sprite,
+        new: cc.Sprite,
+        title: cc.Sprite
+    },
+
+    init: function (data, xzkData) {
+        this.choiceType = data.choiceType;
+        this.id = data.id;
+        this.setLogoImg(data.icon);
+        this.setNewImg(xzkData);
+    },
+
+    //设置玩法背景图
+    setLogoImg: function (url) {
+        if (url === undefined) {
+            url = '';
+        }
+        var logoSF = new cc.SpriteFrame(cc.textureCache.addImage(cc.url.raw(url)), cc.Rect(0, 0, 102, 67));
+        this.logo.getComponent(cc.Sprite).spriteFrame = logoSF;
+    },
+
+    //设置选中状态背景图
+    setNewImg: function (url) {
+        if (url === undefined) {
+            url = '';
+        }
+        var newSF = new cc.SpriteFrame(cc.textureCache.addImage(cc.url.raw(url)), cc.Rect(0, 0, 0, 0));
+        this.new.getComponent(cc.Sprite).spriteFrame = newSF;
+    },
+
+    route: function (id) {
+        var xzkData = dataConfig.xzkData;
+        var seed3D = cc.find("Canvas/left/3DLeft").getComponent('seed3D');
+        if (id === 1) {
+            //直选
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [1, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(0);
+            seed3D.setIcon(0);
+            seed3D.setTip(0);
+        } else if (id === 2) {
+            //通选
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [2, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(0);
+            seed3D.setIcon(1);
+            seed3D.setTip(1);
+        } else if (id === 3) {
+            //组三
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [3, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(1);
+            seed3D.setIcon(2);
+            seed3D.setTip(2);
+        } else if (id === 4) {
+            //组六
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [4, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(1);
+            seed3D.setIcon(3);
+            seed3D.setTip(3);
+        } else if (id === 5) {
+            //和数
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [5, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(2);
+            seed3D.showPack3Ball(1);
+            seed3D.setIcon(4);
+            seed3D.setTip(4);
+        } else if (id === 6) {
+            //包号
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [6, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(4);
+            seed3D.setIcon(5);
+            seed3D.setTip(5);
+        } else if (id === 7) {
+            //1D
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [7, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(0);
+            seed3D.setIcon(6);
+            seed3D.setTip(6);
+        } else if (id === 8) {
+            //2D
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [8, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(0);
+            seed3D.setIcon(7);
+            seed3D.setTip(7);
+        } else if (id === 9) {
+            //和组
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [9, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(2);
+            seed3D.showPack3Ball();
+            seed3D.setIcon(8);
+            seed3D.setTip(8);
+        } else if (id === 10) {
+            //复选3
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [10, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(3);
+            seed3D.setIcon(9);
+            seed3D.setTip(9);
+        } else if (id === 11) {
+            //复选6
+            this.setNewImg(xzkData[1]);
+            seed3D.betType = [11, 0];
+            seed3D.delAllBall();
+            seed3D.packShow(1);
+            seed3D.setIcon(10);
+            seed3D.setTip(10);
+        }
+
+    }
+
+
+});
